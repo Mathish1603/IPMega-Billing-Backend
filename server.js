@@ -5,19 +5,38 @@ require("dotenv").config();
 
 const app = express();
 
-/* ================= MIDDLEWARE ================= */
+// ================= MIDDLEWARE =================
 
 const allowedOrigins = process.env.CORS_ORIGINS
-  ? process.env.CORS_ORIGINS.split(",").map((origin) => origin.trim())
+  ? process.env.CORS_ORIGINS
+      .split(",")
+      .map(origin => origin.trim())
   : [
       "http://localhost:4200",
       "https://ip-mega-billing-frontend.vercel.app"
     ];
 
+console.log("Allowed CORS Origins:", allowedOrigins);
+
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function (origin, callback) {
+
+    // Allow requests without an Origin header
+    // (Postman, server-to-server, etc.)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    console.log("Blocked CORS Origin:", origin);
+    return callback(new Error("Not allowed by CORS"));
+  },
   credentials: true
 }));
+
 app.use(express.json());
 
 app.use('/api', (req, res, next) => {
