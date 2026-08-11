@@ -7,9 +7,12 @@ const app = express();
 
 /* ================= MIDDLEWARE ================= */
 
+const allowedOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(",").map((origin) => origin.trim())
+  : ["http://localhost:4200", "https://ip-mega-billing-frontend.vercel.app"];
+
 app.use(cors({
-  origin: ['http://localhost:4200',
-    'https://ip-mega-billing-frontend.vercel.app'], credentials: true
+  origin: allowedOrigins, credentials: true
 }));
 app.use(express.json());
 
@@ -60,7 +63,7 @@ app.use("/api/suppliers", authMiddleware, supplierRoutes);
 
 /* ================= DATABASE ================= */
 
-mongoose.connect(process.env.MONGO_URL || "mongodb://127.0.0.1:27017/ipmegaBilling")
+mongoose.connect(process.env.MONGODB_URL || "mongodb://127.0.0.1:27017/ipmegaBilling")
   .then(() => {
     console.log("MongoDB Connected Successfully");
     rebuildDateAndForward(getDateStr(new Date())).catch(() => { });
