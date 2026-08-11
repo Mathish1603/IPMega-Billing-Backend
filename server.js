@@ -9,10 +9,14 @@ const app = express();
 
 const allowedOrigins = process.env.CORS_ORIGINS
   ? process.env.CORS_ORIGINS.split(",").map((origin) => origin.trim())
-  : ["http://localhost:4200", "https://ip-mega-billing-frontend.vercel.app"];
+  : [
+      "http://localhost:4200",
+      "https://ip-mega-billing-frontend.vercel.app"
+    ];
 
 app.use(cors({
-  origin: allowedOrigins, credentials: true
+  origin: allowedOrigins,
+  credentials: true
 }));
 app.use(express.json());
 
