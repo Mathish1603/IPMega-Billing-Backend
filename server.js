@@ -9,7 +9,7 @@ const app = express();
 
 app.use(cors({
   origin: ['http://localhost:4200',
-    'https://your-frontend.vercel.app'], credentials: true
+    'https://ip-mega-billing-frontend.vercel.app'], credentials: true
 }));
 app.use(express.json());
 
